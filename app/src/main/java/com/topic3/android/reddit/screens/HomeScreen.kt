@@ -46,6 +46,37 @@ import com.topic3.android.reddit.views.TrendingTopicView
 import java.util.Timer
 import kotlin.concurrent.schedule
 
+private val trendingItems = listOf(TrendingTopicModel(
+    "Compose Tutorial",
+    R.drawable.jetpack_composer
+),
+    TrendingTopicModel(
+        "Compose Animations",
+        R.drawable.jetpack_compose_animations
+    ),
+    TrendingTopicModel(
+        "Compose Migration",
+        R.drawable.compose_migration_crop
+    ),
+    TrendingTopicModel(
+        "DataStore Totorial",
+        R.drawable.data_storage
+    ),
+    TrendingTopicModel(
+        "Android Animations",
+        R.drawable.android_animations
+    ),
+    TrendingTopicModel(
+        "Deep Links in Android",
+        R.drawable.deeplinking
+    ),
+)
+
+@Preview @Composable
+private fun TrendingTopicsPreview() {
+    TrendingTopics(trendingTopics = trendingItems)
+}
+
 @Composable
 fun HomeScreen(viewModel: MainViewModel) {
     val posts: List<PostModel> by viewModel.allPosts.observeAsState(listOf())
@@ -112,4 +143,54 @@ private fun TrendingTopicPreview() {
             R.drawable.jetpack_compose_animations
         )
     )
+}
+@Composable
+private fun TrendingTopics(
+    trendingTopics: List<TrendingTopicModel>,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        shape = MaterialTheme.shapes.large,
+        modifier = modifier
+    ) {
+        Column(modifier = Modifier.padding(vertical = 8.dp)) {
+            Row(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    modifier = Modifier.size(18.dp),
+                    imageVector = Icons.Filled.Star,
+                    tint = Color.Blue,
+                    contentDescription = "Star Icon"
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = "Trending Today",
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            LazyRow(
+                contentPadding = PaddingValues(
+                    start = 16.dp,
+                    top = 8.dp,
+                    end = 16.dp
+                ),
+                content = {
+                    itemsIndexed(
+                        items = trendingTopics,
+                        itemContent = {index,
+                                       trendingModel ->
+                            TrendingTopic(trendingModel)
+                            if (index != trendingTopics.lastIndex) {
+                                Spacer(modifier = Modifier.width(8.dp))
+                            }
+                        }
+                    )
+                }
+            )
+        }
+    }
 }
